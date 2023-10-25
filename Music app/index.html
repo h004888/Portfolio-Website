@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+    <div class="player">
+        <!-- Dashboard -->
+        <div class="dashboard">
+          <!-- Header -->
+          <header>
+            <h4>Now playing:</h4>
+            <h2>String 57th & 9th</h2>
+          </header>
+      
+          <!-- CD -->
+          <div class="cd">
+            <div class="cd-thumb" style="background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg')">
+            </div>
+          </div>
+
+          <!-- Control -->
+          <div class="control">
+            <div class="btn btn-repeat">
+              <i class="fas fa-redo"></i>
+            </div>
+            <div class="btn btn-prev">
+              <i class="fas fa-step-backward"></i>
+            </div>
+            <div class="btn btn-toggle-play">
+              <i class="fas fa-pause icon-pause"></i>
+              <i class="fas fa-play icon-play"></i>
+            </div>
+            <div class="btn btn-next">
+              <i class="fas fa-step-forward"></i>
+            </div>
+            <div class="btn btn-random">
+              <i class="fas fa-random"></i>
+            </div>
+          </div>
+      
+          <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
+      
+          <audio id="audio" src=""></audio>
+        </div>
+      
+        <!-- Playlist -->
+        <div class="playlist">
+
+        </div>
+      </div>
+      <script>
+        const $ = document.querySelector.bind(document)
+        const $$ = document.querySelectorAll.bind(document)
+        const heading = $('header h2')
+        const cdThumb = $('.cd-thumb')
+        const audio = $('#audio')
+        const cd = $('.cd')
+        const playBtn = $('.btn-toggle-play')
+        const player = $('.player')
+        const progress = $('#progress')
+        const nextBtn = $('.btn-next')
+        const prevBtn = $('.btn-prev')
+        const ramdomBtn = $('.btn-random')
+        const repeatBtn = $('.btn-repeat')
+        const playlist = $('.playlist')
+
+        const app = {
+          currentIndex : 0,
+          isPlaying : false,
+          isRandom : false,
+          isRepeat : false,
+          songs : [
+            {
+              name : 'Bật lên tình yêu',
+              singer : 'Hòa minzy',
+              path : './music/y2mate.com - Bật Tình Yêu Lên  Hòa Minzy x Tăng Duy TânCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Bật lên tình yêu.jpg'
+            },
+            {
+              name : 'Gió',
+              singer : 'Jank',
+              path : './music/y2mate.com - Gió  JankCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Gió.jpg'
+            },
+            {
+              name : 'Là anh',
+              singer : 'Phạm Lịch',
+              path : './music/y2mate.com - Là Anh  Phạm LịchCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Là anh.jpg'
+            },
+            {
+              name : 'Lý do gì',
+              singer : 'Thái Học',
+              path : './music/y2mate.com - Lý Do Là Gì  Nguyễn VĩCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Lý do gì.jpg'
+            },
+            {
+              name : 'Người Em Từng Yêu',
+              singer : 'Ngân Ngân',
+              path : './music/y2mate.com - Người Em Từng Yêu  Ngân NgânCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Người em từng yêu.jpg'
+            },
+            {
+              name : 'Như anh đã thấy',
+              singer : 'Phúc XP',
+              path : './music/y2mate.com - Như Anh Đã Thấy Em GUANG Remix  PhucXp  Nhạc Remix Hot Tiktok.mp3',
+              image : './img/Như anh  đã thấy.jpg'
+            },
+            {
+              name : 'Yêu anh đi mẹ anh bán bánh mì',
+              singer : 'Phúc Du',
+              path : './music/y2mate.com - PHÚC DU  yêu anh đi mẹ anh bán bánh mì Lyric Video.mp3',
+              image : './img/Yêu anh đi nhà anh bán bánh mì.jpg'
+            },
+            {
+              name : 'Bật lên tình yêu',
+              singer : 'Hòa minzy',
+              path : './music/y2mate.com - Bật Tình Yêu Lên  Hòa Minzy x Tăng Duy TânCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Bật lên tình yêu.jpg'
+            },
+            {
+              name : 'Anh đang chìm dần vào tim em',
+              singer : 'Hòa minzy',
+              path : './music/y2mate.com - UMEE Remix  H2K x RIN Muzik  Anh Đang Chìm Dần Vào Tim Em Remix (1).mp3',
+              image : './img/anh đang chìm vào tim em.jpg'
+            },
+            {
+              name : 'Bật lên tình yêu',
+              singer : 'Hòa minzy',
+              path : './music/y2mate.com - Bật Tình Yêu Lên  Hòa Minzy x Tăng Duy TânCukak Remix Audio Lyrics Video.mp3',
+              image : './img/Bật lên tình yêu.jpg'
+            }
+
+          ],
+
+          render : function () {
+            const htmls = this.songs.map((song , index) => {
+              return `
+              <div class="song ${index === this.currentIndex ? 'active' : ''}" data-index = "${index}">
+                <div class="thumb" style="background-image: url('${song.image}')">
+                </div>
+                <div class="body">
+                  <h3 class="title">${song.name}</h3>
+                  <p class="author">${song.singer}</p>
+                </div>
+                <div class="option">
+                  <i class="fas fa-ellipsis-h"></i>
+                </div>
+              </div>
+              `
+            })
+            $('.playlist').innerHTML =htmls.join('')
+            
+
+          },
+          defineProperties : function () {
+            Object.defineProperty(this , 'currentSong', {
+              get : function () {
+                  return this.songs[this.currentIndex]
+              }
+            })
+          },
+          handleEvents : function () {
+            const _this = this
+            const cdWidth = cd.offsetWidth 
+
+            //  xử lý cd quay / dừng 
+            const cdThumbAnimate =  cdThumb.animate([
+              {transform: 'rotate(260deg)'}
+            ], {
+              duration : 10000 ,// 10 seconds
+              iterations : Infinity 
+            })
+            cdThumbAnimate.pause()
+
+            // Xử lý phóng to thu nhỏ 
+            document.onscroll = function () {
+              const scrollTop = window.scrollY || document.documentElement.scrollTop
+              const newCdWidth = cdWidth - scrollTop
+
+              cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0 
+              cd.style.opacity = newCdWidth / cdWidth
+            }
+
+            // Xử lý khi ấn play 
+            playBtn.onclick = function () {
+              if(_this.isPlaying) {
+                audio.pause()
+              } else {
+                audio.play()
+              }
+            }
+
+            // khi song được play 
+            audio.onplay = function () {
+              _this.isPlaying = true
+              player.classList.add('playing')
+              cdThumbAnimate.play()
+            }
+
+            // khi song bị pause
+            audio.onpause =function () {
+              _this.isPlaying = false
+              player.classList.remove('playing')
+              cdThumbAnimate.pause()
+            }
+
+            // khi tiến độ bài hát thay đổi
+            audio.ontimeupdate = function () {
+              if(audio.duration) {
+                const propressPercent = Math.floor(audio.currentTime / audio.duration *100)
+                progress.value = propressPercent
+              }
+            }
+
+            // xử lý khi tua song 
+            progress.onchange = function (e) {
+              const seekTime =  audio.duration / 100  * e.target.value
+              audio.currentTime = seekTime
+            }
+            // khi next song
+            nextBtn.onclick = function() {
+              if(_this.isRandom){
+                _this.playRandomSong()
+              } else {
+                _this.nextSong()
+              }
+              audio.play()
+              _this.render()
+            }
+            // khi prev song
+            prevBtn.onclick = function() {
+              if(_this.isRandom) {
+                _this.playRandomSong()
+              } else {
+                _this.prevSong()
+              }
+              audio.play()
+              _this.render()
+              _this.scrollToActiveSong()
+            }
+
+            // xử lý bật tắt ramdomBtn
+            ramdomBtn.onclick = function(e) {
+              _this.isRandom = !_this.isRandom
+              ramdomBtn.classList.toggle('active', _this.isRandom)
+              
+            }
+
+            // xử lý phát lại 1 song
+            repeatBtn.onclick = function(e) {
+              _this.isRepeat = !_this.isRepeat
+              repeatBtn.classList.toggle('active', _this.isRepeat)
+            }
+
+              // xử lý next sau khi audio kết thúc
+              audio.onended = function () {
+              if(_this.isRepeat) {
+                audio.play()
+              } else {
+                nextBtn.click()
+              }
+            }
+
+            // Lắng nghe hành vi click  vào  playlist
+            playlist.onclick = function(e) {
+              const songNode = e.target.closest('.song:not(.active)')
+              if(songNode || e.target.closest('.option')) {
+                // xử lý khi click song 
+                if(songNode) {
+                  _this.currentIndex = Number(songNode.dataset.index)
+                  _this.loadCurrentSong()
+                  _this.render()
+                  audio.play()
+                }
+              }
+            }
+          },
+
+          scrollToActiveSong : function() {
+            setTimeout(() => {
+              $('.song.active').scrollIntoView({
+                behavior : 'smooth',
+                block : 'nearest',
+              })
+            },300)
+          },
+
+          loadCurrentSong :  function () {
+
+            heading.textContent = this.currentSong.name
+            cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
+            audio.src = this.currentSong.path
+
+          },
+          nextSong : function() {
+            this.currentIndex ++
+            if (this.currentIndex >= this.songs.length) {
+              this.currentIndex = 0
+            }
+            this.loadCurrentSong()
+          },
+          prevSong : function() {
+            this.currentIndex --
+            if (this.currentIndex < 0) {
+              this.currentIndex = this.songs.length - 1
+            }
+            this.loadCurrentSong()
+          },
+          playRandomSong : function () {
+            let newIndex;
+            do {
+              newIndex = Math.floor(Math.random() * this.songs.length)
+            } while (newIndex === this.currentIndex)
+            this.currentIndex = newIndex
+            this.loadCurrentSong()
+          },
+          start : function () {
+            // Định nghĩa thuộc tính cho object
+            this.defineProperties()
+            // Lắng nghe / xử lý sự kiện (DOM Event)
+            this.handleEvents()
+            // Tải thông tin bài hát đầu tiên khi UI chạy ứng dụng 
+            this.loadCurrentSong()
+            // Xuất ra bài hát trong danh sách bài hát
+            this.render()
+          },
+               
+
+              
+        }
+        app.start()
+      </script>
+      
+      <!-- Design from: https://static.collectui.com/shots/3671744/musicloud-revolutionary-app-for-music-streaming-large -->
+</body>
+</html>
